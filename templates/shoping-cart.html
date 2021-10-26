@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% load static %}
+{% static "img" as baseUrl %}
+{% block head %}
+{% block searchbar %}
+{% endblock searchbar %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function())
+    {
+        $('tr').each(function()
+        {
+            var subtotal = 0;
+            $(this).find('.shoping__cart__price').each(function()
+            {
+                var price=$(this).text();
+                if(price.length!==0)
+                {
+                    subtotal+=parseFloat(price);
+                }
+            });
+            $(this).find('#total').html('= '+subtotal);
+        });
+    });
+</script>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Shopping Cart</h2>
+                        <div class="breadcrumb__option">
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shoping Cart Section Begin -->
+   <section class="shoping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Products</th>
+                                    <th>Unit</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            {% for product in products %}
+                            <tbody>
+                                <tr>
+                                    <td class="shoping__cart__item">
+                                        <img src="{{product.prod_id.prodimage.url}}" alt=""  width="100" height="100">
+                                        <h5>{{product.prod_id.prodname}}</h5>
+                                    </td>
+                                    <td class="shoping__cart__prieunit">
+                                         {{product.prod_id.prodpriceunit}}
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                         {{product.prod_id.prodprice}}
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <form action="updatequantity"  method="post">
+                                                {% csrf_token %}
+                                                <div class="pro-qty">
+                                                  <input id="quantity"  name="qty" type="text"  value="{{product.quantity}}"/>
+                                                </div>
+                                                <input type="hidden" name="productid"   value="{{product.prod_id.id}}">
+                                                 <!--<a href="updatequantity" class="btn btn-info">Set</a>-->
+                                                <input type="submit" class="btn btn-info" value="Set">
+                                              </form>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        {{product.subtotal}}
+                                    </td>
+                                    <form action="deletecart" method="post">
+                                        <td class="shoping__cart__item__close">
+                                            <a href="{% url 'deletecart' product.prod_id.id %}"> <span class="icon_close"></span></a>
+                                        </td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p style="align:center"><h6 style="color:red"><b>{{ message }}</b></h6></p>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a href="/login/users_home" class="primary-btn">CONTINUE SHOPPING</a>
+                        <!--<a href="placeorder" class="primary-btn cart-btn cart-btn-right" style="background-color:#FF4500"><span class="icon_loading" style="color:white"></span>
+                            <b style="color:white">Place Order</b></a>-->
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__continue">
+                        <!--<div class="shoping__discount">
+                            <h5>Discount Codes</h5>
+                            <form action="#">
+                                <input type="text" placeholder="Enter your coupon code">
+                                <button type="submit" style="color:orange" class="site-btn">APPLY COUPON</button>
+                            </form>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul>
+                            <li>Subtotal <span>{{subtotal}}</span></li>
+                            <li>Discount <span>0</span></li>
+                            <li>Total <span>{{subtotal}}</span></li>
+                        </ul>
+                        <a href="orderproducts" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shoping Cart Section End -->
+
+    <!-- Footer Section Begin -->
+
+    <!-- Footer Section End -->
+
+  {% endblock head %}
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+<script>
+var $tblrows = $("#tblProducts tbody tr");
+$tblrows.each(function (index) {
+    var $tblrow = $(this);
+    $tblrow.find('.quantity').on('change', function () {
+        var qty = $tblrow.find("[name=quantity]").val();
+        var price = $tblrow.find("[name=price]").val();
+        var subTotal = parseInt(qty,10) * parseFloat(price);
+        if (!isNaN(subTotal)) {
+
+            $tblrow.find('.subtotal').val(subTotal.toFixed(2));
+            var grandTotal = 0;
+
+            $(".subtotal").each(function () {
+                var stval = parseFloat($(this).val());
+                grandTotal += isNaN(stval) ? 0 : stval;
+            });
+
+            $('.grdtot').val(grandTotal.toFixed(2));
+        }
+    });
+});
+</script>
+
+</body>
+
+</html>

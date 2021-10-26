@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% static "img" as baseUrl %}
+    <title>User Registeration</title>
+    <!-- Google Font -->
+    <link href="{% static 'https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap' %}" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+
+
+    </script>
+
+</head>
+<body style="align:center">
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                     <!--<div>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                    <div class="alert alert-primary" role="alert">
+                                        {{ message }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                     </div>-->
+                    <div class="section-title">
+                        <h2>Registeration</h2>
+                    </div>
+                    <div class="featured__controls">
+
+                       <div>
+                            <form action="register" method="post" style="align:center">
+                                {% csrf_token %}
+                               <label>First Name  </label>    <input type="text" name="first_name" placeholder="First Name"><br><br>
+                                <label>Last Name </label>  <input type="text" name="last_name" placeholder="Last Name"><br><br>
+                                <label>User Name</label>    <input type="text" name="username" placeholder="Username"><br><br>
+                                <label>Email   </label>    <input type="email" name="email" placeholder="email"><br><br>
+                                <label>Password  </label>    <input type="password" name="password1" placeholder="Password"><br><br>
+                                <label>Confirm Password  </label>    <input type="password" name="password2" placeholder="Confirm Password"><br><br>
+                                <input style="margin-right: 16px" type="submit" value="Submit"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <button style="margin-left: 16px" type="button" class="cancelbtn"><a href="/"> Cancel</a></button>&nbsp;&nbsp;  <br><br>
+                                <b style="color:#191970">Already have an account?&nbsp;<a href="login ">Sign in</a></b>
+                            </form>
+                           <div>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p style="align:center"><h6 style="color:red"><b>{{ message }}</b></h6></p>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+</script>
+</body>
+</html>

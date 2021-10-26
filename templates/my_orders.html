@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+{% static "img" as baseUrl %}
+{% block head %}
+{% block searchbar %}
+{% endblock searchbar %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>My Orders</h2>
+                        <div class="breadcrumb__option">
+                            <span>My Orders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shoping Cart Section Begin -->
+    <section class="shoping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <th>No.of Products</th>
+                                    <th>Deliver Date</th>
+                                    <th>Total Price</th>
+                                    <th>Adv Amount</th>
+                                    <th>Balance Amount</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders%}
+                                <tr>
+                                    <td class="shoping__cart__price">
+                                        {{order.orderid}}
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        {{order.no_of_products}}
+                                    </td>
+                                    <td>
+                                        {{order.deliver_date}}
+                                    </td>
+                                    <td>
+                                        {{order.total_price}}
+                                    </td>
+                                    <td>
+                                        {{order.advance_amount}}
+                                    </td>
+                                    <td>
+                                        {{order.balance_amount}}
+                                    </td>
+                                    <td>
+                                        {% if order.status == 'Rejected' %}
+                                            <br><h6  style="color:red">{{order.status}}</h6>
+                                        {% else %}
+                                            {{order.status}}
+                                                {% if order.status == 'Ordered' %}
+                                                    <br><h7  style="color:red">(wait for final confirmation)</h7>
+                                                {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'view_order_details' order.orderid order.total_price order.advance_amount order.balance_amount order.status %}">View Details</a>
+                                    </td>
+                                    <td>
+                                        {% if order.status == 'Cancelled' %}
+                                            <a  class="primary-btn">CANCELLED</a>
+                                        {% else %}
+                                            <a href="{% url 'cancel_order' order.orderid %}" class="primary-btn">CANCEL ORDER</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        {% if order.status == 'Cancelled' %}
+                                            <br><h6  style="color:orange"><b>Amount will be refunded within 2 days</b></h6>
+                                        {% elif order.status == 'Refunded' %}
+                                             <br><h6  style="color:orange"><b>Refund Completed</b></h6>
+                                        {% elif order.status == 'Rejected' %}
+                                             <br><h4  style="color:red"><b>Your order is rejected</b></h4>
+                                        {% elif order.status == 'Ordered' %}
+                                             <br><h6  style="color:red"><b>Your request is under pending</b></h6>
+                                        {% elif order.status == 'Accepted' %}
+                                             <br><h4  style="color:green"><b>Your order is booked! Collect the products from the shop on deliver date</b></h4>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <!--<tr>
+                                    <td colspan="10">
+                                        {% if order.status == 'Refunded' %}
+                                            <br><h6  style="color:orange"><b>Refund Completed</b></h6>
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        {% if order.status == 'Rejected' %}
+                                            <br><h3  style="color:red"><b>Your order is rejected</b></h3>
+                                        {% endif %}
+                                    </td>
+                                </tr>-->
+                                {% endfor %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                    <div class="alert alert-primary" role="alert">
+                                        <p style="align:center"><h5 style="color:blue"><b>{{ message }}</b></h5></p>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shoping Cart Section End -->
+
+
+    <!-- Footer Section End -->
+    {% endblock head%}
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+
+</body>
+
+</html>
